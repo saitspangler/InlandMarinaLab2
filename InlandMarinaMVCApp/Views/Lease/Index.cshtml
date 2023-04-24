@@ -1,0 +1,41 @@
+﻿@model IEnumerable<InlandMarinaData.Lease>
+
+@{
+    ViewData["Title"] = "Leases";
+}
+@*This page is to come for the next assignment.
+*@<h1>Inland Marina Lease Form</h1>
+
+<p>
+    <a asp-action="Create">Create New Lease</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.SlipID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomerID)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Slip.ID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Customer.FirstName)
+                        @Html.DisplayFor(modelItem => item.Customer.LastName)
+                    </td>
+                </tr>
+            }
+
+        }
+    </tbody>
+</table>

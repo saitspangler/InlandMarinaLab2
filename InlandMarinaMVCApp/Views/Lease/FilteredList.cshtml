@@ -1,0 +1,61 @@
+﻿@model IEnumerable<InlandMarinaData.Slip>
+
+@{
+    ViewData["Title"] = "FilteredList";
+}
+
+@*This page shows a list of all availble slips
+*@
+<h1 class="mb-4">Available Slips by Dock</h1>
+
+<form asp-action="FilteredList" method="post">
+    <div class="mb-3 ">
+        <label for="id" class="form-label"> Select a Dock</label>
+        <select name="id" asp-items="@ViewBag.Docks" class="form-select form-control-color"
+                onchange="this.form.submit()">
+            </select>
+    </div>
+</form>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Slip Number
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Width)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Length)
+            </th>
+            <th>
+                Location
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        Slip #@Html.DisplayFor(modelItem => item.ID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Width) ft
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Length) ft
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Dock.Name)
+                    </td>
+                </tr>
+            }
+
+        }
+    </tbody>
+</table>

@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33530.505
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InlandMarinaMVCApp", "InlandMarinaMVCApp\InlandMarinaMVCApp.csproj", "{8E860451-F454-4DB5-9F2F-83F16C6F4EF1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InlandMarinaData", "InlandMarinaData\InlandMarinaData.csproj", "{4E62C477-D190-4866-AD20-C80F5C727155}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8E860451-F454-4DB5-9F2F-83F16C6F4EF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E860451-F454-4DB5-9F2F-83F16C6F4EF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E860451-F454-4DB5-9F2F-83F16C6F4EF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E860451-F454-4DB5-9F2F-83F16C6F4EF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E62C477-D190-4866-AD20-C80F5C727155}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E62C477-D190-4866-AD20-C80F5C727155}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E62C477-D190-4866-AD20-C80F5C727155}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E62C477-D190-4866-AD20-C80F5C727155}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B828A3D7-9AA0-4B9A-AEB4-F204B1AED19A}
+	EndGlobalSection
+EndGlobal
