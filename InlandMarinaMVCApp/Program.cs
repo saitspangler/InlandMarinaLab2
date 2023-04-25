@@ -1,7 +1,16 @@
 using Microsoft.EntityFrameworkCore;
 using InlandMarinaData;
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).
+                AddCookie(opt => opt.LoginPath = "/Account/Login"); // add to use cookies authentication
+                                                                    // login page: Account controller, Login method
+
+builder.Services.AddSession(); // add before AddControllersWithViews to use session state object
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -22,7 +31,11 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
+
 app.UseAuthorization();
+
+app.UseSession(); // add before MapControllerRoute to use session state object
 
 app.MapControllerRoute(
     name: "default",

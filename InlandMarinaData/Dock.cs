@@ -11,6 +11,7 @@ namespace InlandMarinaData
     [Table("Dock")]
     public class Dock
     {
+        [Key]
         public int ID { get; set; }
 
         [Required]

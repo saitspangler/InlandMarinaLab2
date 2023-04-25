@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using InlandMarinaData;
 
+
 namespace InlandMarinaMVCApp.Controllers
 {
     public class AccountController : Controller
@@ -26,38 +27,37 @@ namespace InlandMarinaMVCApp.Controllers
         /// <param name="user"></param>
         /// <returns>authenticated user or null</returns>
         [HttpPost]
-        public async Task<IActionResult> LoginAsync(Customer customer) // data collected on the form
+        public async Task<IActionResult> Login(Customer customer) // data collected on the form
         {
             Customer cust = CustomerManager.Authenticate(customer.Username, customer.Password);
-            if(customer == null) {
+            if(cust == null) {
                 return View();
             }
-            //user is authenticated
-            //allow user to login and view docks to create a lease
-            //create a cookie
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, cust.Username),
-            };
-            ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims,
-            CookieAuthenticationDefaults.AuthenticationScheme); // use cookies authentication
-            ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-                claimsPrincipal); // generates authentication cookie
-            // if no return URL, go to the home page
-            if (string.IsNullOrEmpty(TempData["ReturnUrl"].ToString()))
-            {
-                return RedirectToAction("Index", "Home");
-            }
+            //user is logged in and authenticated with cookie authentication
+            //create and stores cookie in the browser for the user
+            //cookie is encrypted and sent to the browser
             else
             {
-                return Redirect(TempData["ReturnUrl"].ToString());
+                //create claims
+                List<Claim> claims = new List<Claim>();
+                claims.Add(new Claim(ClaimTypes.Name, cust.Username));
+                claims.Add(new Claim(ClaimTypes.NameIdentifier, cust.ID.ToString()));
+                //create identity
+                ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                //create principal
+                ClaimsPrincipal principal = new ClaimsPrincipal(identity);
+                //sign in
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+                //add current customer to the session
+                HttpContext.Session.SetString("CurrentCustomer", System.Text.Json.JsonSerializer.Serialize(cust));
+                Console.WriteLine(cust);
+                //redirect to home page
+                return RedirectToAction("Index", "Lease");
             }
         }
 
 
-        public async Task<IActionResult> LogoutAsync()
+        public async Task<IActionResult> Logout()
         {
             // release authentication cookie
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
@@ -67,6 +67,46 @@ namespace InlandMarinaMVCApp.Controllers
             return RedirectToAction("Index", "Home"); // go to the home page
         }
 
+        public IActionResult MySlips()
+        {
+            //get list of slips the current user has leased
+            List<Slip> slips = new List<Slip>();
+            string customerJson = HttpContext.Session.GetString("CurrentCustomer");
+            Customer customer = System.Text.Json.JsonSerializer.Deserialize<Customer>(customerJson);
+            using (InlandMarinaContext db = new InlandMarinaContext())
+            {
+                //get list of leases for the current customer
+                List<Lease> leases = db.Leases.Where(l => l.Customer.ID == customer.ID).ToList();
+                //get list of slips for the leases
+                foreach (Lease lease in leases)
+                {
+                    Slip slip = SlipManager.GetSlipById(db, lease.Slip.ID);
+                    slips.Add(slip);
+                }
+                return View(slips);
+            }
+
+        }
+
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Register(Customer customer)
+        {
+            //add a new customer to the database from form data collected on the page
+            try
+            {
+                CustomerManager.AddCustomer(customer);
+                return RedirectToAction("Login");
+            }
+            catch
+            {
+                return View();
+            }
+        }
 
         public IActionResult AccessDenied()
         {

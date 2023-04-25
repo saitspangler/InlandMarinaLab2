@@ -11,6 +11,9 @@ namespace InlandMarinaData
     [Table("Customer")]
     public class Customer
     {
+        [Key]
+        //auto-generate id
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
 
         [Required]

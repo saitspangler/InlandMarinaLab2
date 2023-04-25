@@ -12,6 +12,7 @@ namespace InlandMarinaData
     [Table("Lease")]
     public class Lease
     {
+        [Key]
         public int ID { get; set; }
 
         [Display(Name = "Slip")]

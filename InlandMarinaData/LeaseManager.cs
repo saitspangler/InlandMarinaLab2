@@ -90,6 +90,12 @@ namespace InlandMarinaData
             return leases;
         }
 
+        public static List<Slip> GetSlipsFromCustomer(InlandMarinaContext db, int customerId)
+        {
+            List<Slip> slips = db.Leases.Where(l => l.CustomerID == customerId).Select(l => l.Slip).ToList();
+            return slips;
+        }
+
 
         /// <summary>
         /// get lease with given ID

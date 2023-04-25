@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using InlandMarinaData;
+using Microsoft.AspNetCore.Authorization;
 
 namespace InlandMarinaMVCApp.Controllers
 {
@@ -15,8 +16,9 @@ namespace InlandMarinaMVCApp.Controllers
         }
 
 
-        // GET: MovieController
-        // list of movies
+        // GET: LeaseController
+        // list of leases when authorized
+        [Authorize]
         public ActionResult Index()
         {
             List<Lease> leases = null;
@@ -33,7 +35,8 @@ namespace InlandMarinaMVCApp.Controllers
             return View(leases);
         }
 
-        // filter slips by docks
+        // filter slips by docks when authorized
+        [Authorize]
         public ActionResult FilteredList(string id = "1")
         {
             List<Slip> slips = null;
@@ -65,7 +68,8 @@ namespace InlandMarinaMVCApp.Controllers
             return RedirectToAction("FilteredList", new { id = id });
         }
 
-        // GET: LeaseController/Details/5
+        // GET: LeaseController/Details/5 when authorized
+        [Authorize]
         public ActionResult Details(int id)
         {
             try
@@ -82,6 +86,8 @@ namespace InlandMarinaMVCApp.Controllers
         }
 
         // GET: LeaseController/Create
+        //when authorized
+        [Authorize]
         public ActionResult Create()
         {
             // prepare list of genres for the drop down list
@@ -115,7 +121,8 @@ namespace InlandMarinaMVCApp.Controllers
             }
         }
 
-        // GET: LeaseController/Edit/5
+        // GET: LeaseController/Edit/5 when authorized
+        [Authorize]
         public ActionResult Edit(int id)
         {
             // prepare list of docks for the drop down list
@@ -126,7 +133,8 @@ namespace InlandMarinaMVCApp.Controllers
             return View(lease);
         }
 
-        // POST: LeaseController/Edit/5
+        // POST: LeaseController/Edit/5 when authorized
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, Lease newLease)
@@ -149,14 +157,16 @@ namespace InlandMarinaMVCApp.Controllers
             }
         }
 
-        // GET: LeaseController/Delete/5
+        // GET: LeaseController/Delete/5 when authorized
+        [Authorize]
         public ActionResult Delete(int id)
         {
             Lease lease = LeaseManager.GetLeaseById(_context, id);
             return View(lease);
         }
 
-        // POST: LeaseController/Delete/5
+        // POST: LeaseController/Delete/5 when authorized
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, Lease Lease)

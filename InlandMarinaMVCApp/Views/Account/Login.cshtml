@@ -3,23 +3,23 @@
     ViewData["Title"] = "Login";
 }
 <form asp-action="Login">
-    <h3>Login</h3>
-    <table class="table">
+    <h3 class="text-start">Login</h3>
+    <table class="col-12">
         <tr>
-            <td>Username:</td>
+            <td class="form-label col-4">Username:</td>
             <td>
                 <input type="text" asp-for="Username" />
             </td>
         </tr>
         <tr>
-            <td>Password:</td>
+            <td class="form-label col-4"> Password:</td>
             <td>
-                <input type="text" asp-for="Password" />
+                <input type="password" asp-for="Password" />
             </td>
         </tr>
         <tr>
-            <td colspan="2">
-                <input type="submit" value="Authenticate" class="btn btn-primary" />
+            <td class="form-control-lg">
+                <input type="submit" value="Login" class="btn btn-primary col-4"  />
             </td>
         </tr>
     </table>
