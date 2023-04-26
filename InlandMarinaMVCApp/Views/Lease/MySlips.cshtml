@@ -1,0 +1,36 @@
+﻿@model IEnumerable<InlandMarinaData.Lease>
+
+@{
+    ViewData["Title"] = "My Slips";
+}
+
+<h1>MySlips</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Slip #
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Slip.Dock)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SlipID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Slip.Dock.Name) 
+            </td>
+            <td>
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

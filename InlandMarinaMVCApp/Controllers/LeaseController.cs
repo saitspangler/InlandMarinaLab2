@@ -68,6 +68,22 @@ namespace InlandMarinaMVCApp.Controllers
             return RedirectToAction("FilteredList", new { id = id });
         }
 
+        public IActionResult MySlips()
+        {
+            //get list of slips the current user has leased
+            List<Slip> slips = new List<Slip>();
+            string customerID = HttpContext.Session.GetString("CurrentCustomer");
+            var id = int.Parse(customerID);
+            using (InlandMarinaContext db = new InlandMarinaContext())
+            {
+                //get list of leases for the current customer
+                List<Lease> leases = LeaseManager.GetLeasesByCustomer(db, id);
+                //get list of slips for the leases
+                return View(leases);
+            }
+
+        }
+
         // GET: LeaseController/Details/5 when authorized
         [Authorize]
         public ActionResult Details(int id)
@@ -121,41 +137,6 @@ namespace InlandMarinaMVCApp.Controllers
             }
         }
 
-        // GET: LeaseController/Edit/5 when authorized
-        [Authorize]
-        public ActionResult Edit(int id)
-        {
-            // prepare list of docks for the drop down list
-            List<Dock> docks = LeaseManager.GetDocks(_context);
-            var list = new SelectList(docks, "DockID", "Name");
-            ViewBag.Docks = list;
-            Lease lease = LeaseManager.GetLeaseById(_context, id);
-            return View(lease);
-        }
-
-        // POST: LeaseController/Edit/5 when authorized
-        [Authorize]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, Lease newLease)
-        {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    LeaseManager.UpdateLease(_context, id, newLease);
-                    return RedirectToAction(nameof(Index));
-                }
-                else
-                {
-                    return View(newLease);
-                }
-            }
-            catch
-            {
-                return View(newLease);
-            }
-        }
 
         // GET: LeaseController/Delete/5 when authorized
         [Authorize]

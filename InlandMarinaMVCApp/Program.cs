@@ -10,7 +10,11 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
                 AddCookie(opt => opt.LoginPath = "/Account/Login"); // add to use cookies authentication
                                                                     // login page: Account controller, Login method
 
-builder.Services.AddSession(); // add before AddControllersWithViews to use session state object
+builder.Services.AddSession(options => {
+    options.IdleTimeout = TimeSpan.FromMinutes(90);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+}); // add before AddControllersWithViews to use session state object
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

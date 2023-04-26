@@ -49,7 +49,7 @@ namespace InlandMarinaMVCApp.Controllers
                 //sign in
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
                 //add current customer to the session
-                HttpContext.Session.SetString("CurrentCustomer", System.Text.Json.JsonSerializer.Serialize(cust));
+                HttpContext.Session.SetString("CurrentCustomer", cust.ID.ToString());
                 Console.WriteLine(cust);
                 //redirect to home page
                 return RedirectToAction("Index", "Lease");
@@ -71,19 +71,14 @@ namespace InlandMarinaMVCApp.Controllers
         {
             //get list of slips the current user has leased
             List<Slip> slips = new List<Slip>();
-            string customerJson = HttpContext.Session.GetString("CurrentCustomer");
-            Customer customer = System.Text.Json.JsonSerializer.Deserialize<Customer>(customerJson);
+            string customerID = HttpContext.Session.GetString("CurrentCustomer");
+            var id = int.Parse(customerID);
             using (InlandMarinaContext db = new InlandMarinaContext())
             {
                 //get list of leases for the current customer
-                List<Lease> leases = db.Leases.Where(l => l.Customer.ID == customer.ID).ToList();
+                List<Lease> leases = LeaseManager.GetLeasesByCustomer(db, id);
                 //get list of slips for the leases
-                foreach (Lease lease in leases)
-                {
-                    Slip slip = SlipManager.GetSlipById(db, lease.Slip.ID);
-                    slips.Add(slip);
-                }
-                return View(slips);
+                return View(leases);
             }
 
         }

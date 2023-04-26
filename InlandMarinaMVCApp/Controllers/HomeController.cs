@@ -6,7 +6,6 @@ namespace InlandMarinaMVCApp.Controllers
     {
         public IActionResult Index()
         {
-            Console.WriteLine(HttpContext.Session.GetString("CurrentCustomer"));
             return View();
         }
 
