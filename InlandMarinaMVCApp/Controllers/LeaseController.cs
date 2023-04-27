@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using InlandMarinaData;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using System.Text;
 
 namespace InlandMarinaMVCApp.Controllers
 {
@@ -21,6 +23,19 @@ namespace InlandMarinaMVCApp.Controllers
         [Authorize]
         public ActionResult Index()
         {
+            // Retrieve ID of current user from session variable
+            if (HttpContext.Session.TryGetValue("CurrentCustomer", out byte[] currentUserId))
+            {
+                // Retrieve Customer object from database
+                int customerId = int.Parse(Encoding.UTF8.GetString(currentUserId));
+                Customer customer = _context.Customers.Find(customerId);
+
+                // Retrieve first name of current user
+                string firstName = customer.FirstName;
+
+                // Pass first name to view
+                HttpContext.Session.SetString("FirstName", firstName);
+            }
             List<Lease> leases = null;
             try
             {
@@ -106,34 +121,45 @@ namespace InlandMarinaMVCApp.Controllers
         [Authorize]
         public ActionResult Create()
         {
-            // prepare list of genres for the drop down list
-            List<Dock> docks = LeaseManager.GetDocks(_context);
-            var list = new SelectList(docks, "DockID", "Name");
-            ViewBag.Docks = list;
-            Lease lease = new Lease(); // empty Lease object
-            return View(lease);
+            Lease newLease = new Lease(); // empty Lease object
+            return View(newLease);
         }
 
         // POST: LeaseController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Lease newLease) // data collected from the form
+        public ActionResult Create(int[] slipId) // data collected from the form
         {
             try
             {
-                if (ModelState.IsValid)
+                // Retrieve ID of current user from session variable
+                if (HttpContext.Session.TryGetValue("CurrentCustomer", out byte[] currentUserId))
                 {
-                    LeaseManager.AddLease(_context, newLease);
+                    // Create new Lease object for each selected SlipID
+                    foreach (var id in slipId)
+                    {
+                        var newLease = new Lease
+                        {
+                            CustomerID = int.Parse(Encoding.UTF8.GetString(currentUserId)),
+                            SlipID = id
+                        };
+                        LeaseManager.AddLease(_context, newLease);
+                    }
+
                     return RedirectToAction(nameof(Index));
                 }
-                else // validation errors
+                else
                 {
-                    return View(newLease);
+                    // Handle case where CurrentCustomer session variable is not found
+                    ModelState.AddModelError("", "Current user not found");
+                    return View();
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                return View(newLease);
+                // Display exception message
+                ModelState.AddModelError("", ex.Message);
+                return View();
             }
         }
 

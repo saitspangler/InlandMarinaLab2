@@ -15,6 +15,18 @@
             <th>
                 @Html.DisplayNameFor(model => model.Slip.Dock)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Slip.Length)
+            </th>
+            <th>
+               @Html.DisplayNameFor(model => model.Slip.Width)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Slip.Dock.WaterService)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Slip.Dock.ElectricalService)
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -27,8 +39,20 @@
                 @Html.DisplayFor(modelItem => item.Slip.Dock.Name) 
             </td>
             <td>
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                @Html.DisplayFor(modelItem => item.Slip.Length)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Slip.Width)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Slip.Dock.WaterService)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Slip.Dock.ElectricalService)
+            </td>
+            <td>
+                @Html.ActionLink("Details", "Details", new { id=item.ID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id=item.ID })
             </td>
         </tr>
 }

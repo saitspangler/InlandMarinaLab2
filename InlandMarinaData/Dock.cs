@@ -16,6 +16,8 @@ namespace InlandMarinaData
 
         [Required]
         [StringLength(30)]
+        //display name in the view
+        [Display(Name = "Dock Name")]
         public string Name { get; set; }
 
         public bool WaterService { get; set; }

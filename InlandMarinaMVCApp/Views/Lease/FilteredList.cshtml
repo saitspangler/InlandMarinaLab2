@@ -4,8 +4,7 @@
     ViewData["Title"] = "FilteredList";
 }
 
-@*This page shows a list of all availble slips
-*@
+@*This page shows a list of all availble slips*@
 <h1 class="mb-4">Available Slips by Dock</h1>
 
 <form asp-action="FilteredList" method="post">
@@ -13,49 +12,41 @@
         <label for="id" class="form-label"> Select a Dock</label>
         <select name="id" asp-items="@ViewBag.Docks" class="form-select form-control-color"
                 onchange="this.form.submit()">
-            </select>
+        </select>
     </div>
 </form>
 
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Slip Number
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Width)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Length)
-            </th>
-            <th>
-                Location
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model != null)
-        {
-            @foreach (var item in Model)
+<form asp-action="Create" method="post">
+    <table class="table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Slip Number</th>
+                <th>@Html.DisplayNameFor(model => model.Width)</th>
+                <th>@Html.DisplayNameFor(model => model.Length)</th>
+                <th>Electrical Service</th>
+                <th>Water Service</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
             {
-                <tr>
-                    <td>
-                        Slip #@Html.DisplayFor(modelItem => item.ID)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Width) ft
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Length) ft
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Dock.Name)
-                    </td>
-                </tr>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td><input type="radio" name="slipId" value="@item.ID" /></td>
+                        <td>Slip #@Html.DisplayFor(modelItem => item.ID)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Width) ft</td>
+                        <td>@Html.DisplayFor(modelItem => item.Length) ft</td>
+                        <td>@Html.DisplayFor(modelItem => item.Dock.ElectricalService)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Dock.WaterService)</td>
+                    </tr>
+                }
             }
+        </tbody>
+    </table>
 
-        }
-    </tbody>
-</table>
+    <div class="form-group">
+        <input type="submit" value="Create Lease" class="btn btn-primary" />
+    </div>
+</form>

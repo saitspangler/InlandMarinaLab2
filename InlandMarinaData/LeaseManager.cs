@@ -23,7 +23,7 @@ namespace InlandMarinaData
             List<Lease> leases = null;
             //using(InlandMarinaContext db = new InlandMarinaContext())
             //{
-            leases = db.Leases.Include(l => l.Customer).Include(l => l.Slip).ToList();
+            leases = db.Leases.Include(l => l.Customer).Include(l => l.Slip).OrderBy(l => l.SlipID).ToList();
             //}
             return leases;
         }
@@ -59,7 +59,7 @@ namespace InlandMarinaData
         public static List<Lease> GetLeasesByCustomer(InlandMarinaContext db, int customerId)
         {
             List<Lease> leases = db.Leases.Where(l => l.CustomerID == customerId).
-                Include(l => l.Customer).Include(l => l.Slip).OrderBy(l => l.SlipID).ToList();
+                Include(l => l.Customer).Include(l => l.Slip).ThenInclude(slip => slip.Dock).OrderBy(l => l.SlipID).ToList();
             return leases;
         }
 
@@ -114,12 +114,12 @@ namespace InlandMarinaData
         /// add another lease to the table
         /// </summary>
         /// <param name="db">context object</param>
-        /// <param name="lease">new lease to add</param>
-        public static void AddLease(InlandMarinaContext db, Lease lease)
+        /// <param name="newlease">new lease to add</param>
+        public static void AddLease(InlandMarinaContext db, Lease newlease)
         {
-            if (lease != null)
+            if (newlease != null)
             {
-                db.Leases.Add(lease);
+                db.Leases.Add(newlease);
                 db.SaveChanges();
             }
         }
