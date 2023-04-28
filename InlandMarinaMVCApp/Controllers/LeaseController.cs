@@ -23,6 +23,7 @@ namespace InlandMarinaMVCApp.Controllers
         [Authorize]
         public ActionResult Index()
         {
+            List<Lease> leases = null;
             // Retrieve ID of current user from session variable
             if (HttpContext.Session.TryGetValue("CurrentCustomer", out byte[] currentUserId))
             {
@@ -36,17 +37,25 @@ namespace InlandMarinaMVCApp.Controllers
                 // Pass first name to view
                 HttpContext.Session.SetString("FirstName", firstName);
             }
-            List<Lease> leases = null;
             try
             {
-                leases = LeaseManager.GetLeases(_context);
+                //get list of slips the current user has leased
+                List<Slip> slips = new List<Slip>();
+                string customerID = HttpContext.Session.GetString("CurrentCustomer");
+                var id = int.Parse(customerID);
+                using (InlandMarinaContext db = new InlandMarinaContext())
+                {
+                    //get list of leases for the current customer
+                    leases = LeaseManager.GetLeasesByCustomer(db, id);
+                    //get list of slips for the leases
+                    
+                }
             }
             catch
             {
                 TempData["Message"] = "Database connection error. Try again later.";
                 TempData["IsError"] = true;
             }
-
             return View(leases);
         }
 
@@ -73,6 +82,13 @@ namespace InlandMarinaMVCApp.Controllers
                 TempData["Message"] = "Database connection error. Try again later.";
                 TempData["IsError"] = true;
             }
+
+            // for ajax request
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_SlipsTable", slips);
+            }
+
             return View("FilteredList", slips);
         }
 
@@ -80,9 +96,17 @@ namespace InlandMarinaMVCApp.Controllers
         public ActionResult FilteredList(IFormCollection form)
         {
             string id = form["id"];
+
+            // for ajax request
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return RedirectToAction("FilteredList", new { id = id });
+            }
+
             return RedirectToAction("FilteredList", new { id = id });
         }
 
+        [Authorize]
         public IActionResult MySlips()
         {
             //get list of slips the current user has leased

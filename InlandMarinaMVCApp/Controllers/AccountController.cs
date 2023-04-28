@@ -67,22 +67,6 @@ namespace InlandMarinaMVCApp.Controllers
             return RedirectToAction("Index", "Home"); // go to the home page
         }
 
-        public IActionResult MySlips()
-        {
-            //get list of slips the current user has leased
-            List<Slip> slips = new List<Slip>();
-            string customerID = HttpContext.Session.GetString("CurrentCustomer");
-            var id = int.Parse(customerID);
-            using (InlandMarinaContext db = new InlandMarinaContext())
-            {
-                //get list of leases for the current customer
-                List<Lease> leases = LeaseManager.GetLeasesByCustomer(db, id);
-                //get list of slips for the leases
-                return View(leases);
-            }
-
-        }
-
         public IActionResult Register()
         {
             return View();

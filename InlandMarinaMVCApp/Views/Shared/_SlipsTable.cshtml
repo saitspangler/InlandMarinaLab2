@@ -1,0 +1,30 @@
+﻿@model IEnumerable<InlandMarinaData.Slip>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Slip Number</th>
+            <th>@Html.DisplayNameFor(model => model.Width)</th>
+            <th>@Html.DisplayNameFor(model => model.Length)</th>
+            <th>Electrical Service</th>
+            <th>Water Service</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td><input type="radio" name="slipId" value="@item.ID" /></td>
+                    <td>Slip #@Html.DisplayFor(modelItem => item.ID)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Width) ft</td>
+                    <td>@Html.DisplayFor(modelItem => item.Length) ft</td>
+                    <td>@Html.DisplayFor(modelItem => item.Dock.ElectricalService)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Dock.WaterService)</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

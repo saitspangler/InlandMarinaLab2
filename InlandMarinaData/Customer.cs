@@ -16,27 +16,27 @@ namespace InlandMarinaData
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Please enter your first name")]
         [StringLength(30)]
         public string FirstName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Please enter your last name")]
         [StringLength(30)]
         public string LastName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Please enter a valid phone number")]
         [RegularExpression(@"^\d{10}$")]
         public string Phone { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Please enter your city")]
         [StringLength(30)]
         public string City { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Please enter your username")]
         [StringLength(30)]
         public string Username { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Please enter your password")]
         [StringLength(30)]
         public string Password { get; set; }
 

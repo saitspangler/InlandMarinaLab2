@@ -49,10 +49,11 @@
     </div>
 </div>
 
-<div class="text-center">
-    <a asp-action="Index">Home</a>
+<div class="d-grid gap-5 d-sm-flex justify-content-sm-center">
+    <button type="button" class="btn btn-primary btn-lg px-4">
+        <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Home</a>
+    </button>
 </div>
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

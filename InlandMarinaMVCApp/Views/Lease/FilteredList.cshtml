@@ -11,42 +11,55 @@
     <div class="mb-3 ">
         <label for="id" class="form-label"> Select a Dock</label>
         <select name="id" asp-items="@ViewBag.Docks" class="form-select form-control-color"
-                onchange="this.form.submit()">
+                onchange="filterSlips(this.value)">
         </select>
     </div>
 </form>
 
 <form asp-action="Create" method="post">
-    <table class="table">
-        <thead>
-            <tr>
-                <th></th>
-                <th>Slip Number</th>
-                <th>@Html.DisplayNameFor(model => model.Width)</th>
-                <th>@Html.DisplayNameFor(model => model.Length)</th>
-                <th>Electrical Service</th>
-                <th>Water Service</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model != null)
-            {
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td><input type="radio" name="slipId" value="@item.ID" /></td>
-                        <td>Slip #@Html.DisplayFor(modelItem => item.ID)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Width) ft</td>
-                        <td>@Html.DisplayFor(modelItem => item.Length) ft</td>
-                        <td>@Html.DisplayFor(modelItem => item.Dock.ElectricalService)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Dock.WaterService)</td>
-                    </tr>
-                }
-            }
-        </tbody>
-    </table>
+    <div id="slipsTable">
+        @Html.Partial("_SlipsTable", Model)
+    </div>
 
     <div class="form-group">
-        <input type="submit" value="Create Lease" class="btn btn-primary" />
+        <input type="submit" value="Create Lease" class="btn btn-primary" onclick="return confirmLease()" />
     </div>
 </form>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    function filterSlips(dockId) {
+        $.ajax({
+            url: '@Url.Action("FilteredList")',
+            type: 'POST',
+            data: { id: dockId },
+            success: function (result) {
+                $('#slipsTable').html(result);
+            }
+        });
+    }
+</script>
+
+<script>
+    function confirmLease() {
+        // Get the selected radio button
+        var slipId = document.querySelector('input[name="slipId"]:checked').value;
+
+        // Find the row that contains the selected slip
+        var slipRow = document.querySelector('input[value="' + slipId + '"]').parentNode.parentNode;
+
+        // Get the slip details from the row
+        var slipNumber = slipRow.cells[1].textContent;
+        var slipWidth = slipRow.cells[2].textContent;
+        var slipLength = slipRow.cells[3].textContent;
+
+        // Create the confirmation message
+        var message = "Are you sure you want to create a lease for " + slipNumber + "?\n";
+        message += "Width: " + slipWidth + "\n";
+        message += "Length: " + slipLength + "\n";
+
+        // Display the confirmation popup
+        return confirm(message);
+    }
+</script>

@@ -1,41 +1,60 @@
 ﻿@model IEnumerable<InlandMarinaData.Lease>
 
 @{
-    ViewData["Title"] = "Leases";
+    ViewData["Title"] = "My Slips";
 }
-@*This page is to come for the next assignment.
-*@<h1>Inland Marina Lease Form</h1>
 
-<p>
-    <a asp-action="Create">Create New Lease</a>
-</p>
+<h1>My Slips</h1>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.SlipID)
+                Slip #
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CustomerID)
+                @Html.DisplayNameFor(model => model.Slip.Dock)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Slip.Length)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Slip.Width)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Slip.Dock.WaterService)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Slip.Dock.ElectricalService)
             </th>
         </tr>
     </thead>
     <tbody>
-        @if (Model != null)
+        @foreach (var item in Model)
         {
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Slip.ID)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Customer.FirstName)
-                        @Html.DisplayFor(modelItem => item.Customer.LastName)
-                    </td>
-                </tr>
-            }
-
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SlipID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Slip.Dock.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Slip.Length)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Slip.Width)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Slip.Dock.WaterService)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Slip.Dock.ElectricalService)
+                </td>
+                <td>
+                    @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+                </td>
+            </tr>
         }
     </tbody>
 </table>
